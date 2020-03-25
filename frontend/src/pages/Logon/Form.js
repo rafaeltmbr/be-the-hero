@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiLogIn } from "react-icons/fi";
 
 import "./Form.sass";
 import login from "../../assets/login.svg";
@@ -52,14 +53,15 @@ export default function Form({ idLength = 8, onSubmit, onRegister }) {
       >
         Entrar
       </button>
-      <button
+      <a
+        href="/#"
         className="not-registered"
         tabIndex={enabled ? 3 : 2}
         onClick={handleRegister}
       >
-        <img src={login} alt="login" />
+        <FiLogIn size={16} color="#E02041" />
         <p>Não tenho cadastro</p>
-      </button>
+      </a>
     </form>
   );
 }
