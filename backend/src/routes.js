@@ -23,7 +23,7 @@ routes.delete('/incidents/:id', IncidentController.delete);
 routes.get('/profile', ProfileController.index);
 
 routes.all('*', (req, res) =>
-  res.status(404).json({ error: 'ROUTE NOT HANDLED' })
+  res.status(404).json({ error: 'Resource not found' })
 );
 
 export default routes;

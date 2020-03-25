@@ -19,16 +19,25 @@ const storeSchema = Yup.object().shape({
 class OngController {
   async index(req, res) {
     try {
-      const ongs = await dbConnection('ongs').select(
-        'name',
-        'email',
-        'whatsapp',
-        'city',
-        'uf'
-      );
-      res.json({ ongs });
+      const page = Number(req.query.page) || 1;
+      const page_size = Number(req.query.page_size) || 5;
+      const pageOffset = (page - 1) * page_size;
+
+      let [{ 'count(*)': count }] = await dbConnection('ongs').count();
+      count = Number(count);
+
+      res.header('X-Total-Count', count);
+      res.header('X-Total-Pages', Math.ceil(count / page_size));
+      res.header('X-Current-Page', page);
+
+      const ongs = await dbConnection('ongs')
+        .select('name', 'email', 'whatsapp', 'city', 'uf')
+        .offset(pageOffset)
+        .limit(page_size);
+
+      return res.json({ ongs });
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 
@@ -36,22 +45,33 @@ class OngController {
     try {
       const { id } = req.params;
       if (!(await ongIdSchema.isValid({ id }))) {
-        throw new Error('Bad input. Invalid schema!');
+        return res.status(400).json({ message: 'Invalid schema' });
       }
 
-      const ong = await dbConnection('ongs').select('*').where({ id });
-      if (!ong) throw new Error('ONG not found');
+      const ong = await dbConnection('ongs').select('*').where({ id }).first();
+      if (!ong) {
+        return res.status(404).json({ message: 'ONG not found' });
+      }
 
-      res.json(...ong);
+      return res.json(ong);
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 
   async store(req, res) {
     try {
       if (!(await storeSchema.isValid(req.body))) {
-        throw new Error('Bad input. Invalid schema!');
+        return res.status(400).json({ message: 'Invalid schema' });
+      }
+
+      const emailExist = await dbConnection('ongs')
+        .select('id')
+        .where({ email: req.body.email })
+        .first();
+
+      if (emailExist) {
+        return res.status(400).json({ message: 'This email already exists' });
       }
 
       const id = crypto.randomBytes(4).toString('HEX');
@@ -59,9 +79,9 @@ class OngController {
 
       await dbConnection('ongs').insert(ong);
 
-      res.json({ ong_id: ong.id });
+      return res.json({ ong_id: ong.id });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 }

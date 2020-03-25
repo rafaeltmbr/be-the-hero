@@ -5,8 +5,11 @@ import dbConnection from '../../database/connection';
 const storeSchema = Yup.object().shape({
   title: Yup.string().required(),
   description: Yup.string().required(),
-  value: Yup.number().required(),
-  ong_id: Yup.string().length(8).required(),
+  value: Yup.number().strict().required(),
+});
+
+const ongIdSchema = Yup.object().shape({
+  id: Yup.string().length(8).strict().required(),
 });
 
 class IncidentController {
@@ -39,9 +42,9 @@ class IncidentController {
           'ongs.uf',
         ]);
 
-      res.json({ incidents });
+      return res.json({ incidents });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 
@@ -49,31 +52,48 @@ class IncidentController {
     try {
       const { id } = req.params;
       const incident = await dbConnection('incidents')
-        .select('title', 'description', 'value', 'ong_id')
-        .where({ id })
-        .first();
+        .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+        .where('incidents.id', id)
+        .first()
+        .select(
+          'incidents.title',
+          'incidents.description',
+          'incidents.value',
+          'ongs.name',
+          'ongs.email',
+          'ongs.whatsapp',
+          'ongs.city',
+          'ongs.uf'
+        );
 
-      if (!incident) throw new Error('Incident not found');
-      const { ong_id } = incident;
+      if (!incident) {
+        return res.status(404).json({ message: 'Incident not found' });
+      }
 
-      const ong = await dbConnection('ongs')
-        .select('name', 'email', 'whatsapp', 'city', 'uf')
-        .where({ id: ong_id })
-        .first();
-
-      delete incident.ong_id;
-
-      res.json({ ...incident, ong });
+      return res.json({ ...incident });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 
   async store(req, res) {
     try {
       const ong_id = req.headers.authorization;
-      if (!(await storeSchema.isValid({ ...req.body, ong_id }))) {
-        throw new Error('Bad input. Invalid schema!');
+      if (!(await ongIdSchema.isValid({ id: ong_id }))) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      const ong = await dbConnection('ongs')
+        .select('id')
+        .where({ id: ong_id })
+        .first();
+
+      if (!ong) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      if (!(await storeSchema.isValid(req.body))) {
+        return res.status(400).json({ message: 'Invalid schema' });
       }
 
       const [id] = await dbConnection('incidents').insert({
@@ -81,9 +101,9 @@ class IncidentController {
         ong_id,
       });
 
-      res.json({ id, ...req.body });
+      return res.json({ id, ...req.body });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 
@@ -91,19 +111,28 @@ class IncidentController {
     try {
       const ong_id = req.headers.authorization;
       const { id } = req.params;
+
+      if (!(await ongIdSchema.isValid({ id: ong_id }))) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
       const incident = await dbConnection('incidents')
         .select('*')
         .where({ id })
         .first();
 
-      if (!incident || incident.ong_id !== ong_id) {
-        throw new Error('Bad input. Invalid schema or non authorized');
+      if (!incident) {
+        return res.status(404).json({ message: 'Incident not found' });
+      }
+
+      if (incident.ong_id !== ong_id) {
+        return res.status(401).json({ message: 'Operation not permitted' });
       }
 
       await dbConnection('incidents').delete().where({ id });
-      res.status(204).send();
+      return res.status(204).send();
     } catch (err) {
-      res.status(401).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 }

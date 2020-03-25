@@ -12,16 +12,21 @@ class ProfileController {
       const id = req.headers.authorization;
 
       if (!(await ongIdSchema.isValid({ id }))) {
-        throw new Error('Bad input. Invalid schema!');
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      const ong = await dbConnection('ongs').select('id').where({ id }).first();
+      if (!ong) {
+        return res.status(401).json({ message: 'Operation not permitted' });
       }
 
       const incidents = await dbConnection('incidents')
         .select('id', 'title', 'description', 'value')
         .where({ ong_id: id });
 
-      res.json({ incidents });
+      return res.json({ incidents });
     } catch (err) {
-      res.status(401).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 }

@@ -11,18 +11,22 @@ class SessionController {
     try {
       const { id } = req.body;
 
-      if (!(await ongIdSchema.isValid({ id })))
-        throw new Error('Bad input. Invalid schema');
+      if (!(await ongIdSchema.isValid({ id }))) {
+        return res.status(401).json({ message: 'Invalid schema' });
+      }
 
       const ong = await dbConnection('ongs')
         .select('name')
         .where({ id })
         .first();
-      if (!ong) throw new Error('ONG not found with the provided id');
 
-      res.send(ong);
+      if (!ong) {
+        return res.status(404).json({ message: 'ONG not found' });
+      }
+
+      return res.send(ong);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   }
 }
