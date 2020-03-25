@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
 import "./Form.sass";
@@ -52,15 +53,15 @@ export default function Form({ idLength = 8, onSubmit, onRegister }) {
       >
         Entrar
       </button>
-      <a
-        href="/#"
-        className="not-registered"
+      <Link
+        to="/register"
+        className="link"
         tabIndex={enabled ? 3 : 2}
         onClick={handleRegister}
       >
         <FiLogIn size={16} color="#E02041" />
         <p>Não tenho cadastro</p>
-      </a>
+      </Link>
     </form>
   );
 }

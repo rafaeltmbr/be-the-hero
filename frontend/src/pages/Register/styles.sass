@@ -1,0 +1,74 @@
+.register 
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  display: flex
+  align-items: center
+  justify-content: center
+
+  .content
+    width: 100%
+    max-width: 1100px
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: space-between
+    background-color: '#f0f0f5'
+    padding: 96px
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1)
+
+    section
+      width: 100%
+      max-width: 380px
+      margin-right: 50px
+
+      h1
+        margin: 64px 0 32px
+        font-size: 32px
+
+      p
+        font-size: 18px
+        color: #737380
+        line-height: 32px
+
+      .link
+        p
+          color: #333
+
+@media (max-width: 1000px)
+  .register
+    display: block
+
+    .content
+      display: block
+      padding: 30px
+      margin: 30px auto
+      max-width: 500px
+
+      section
+        h1
+          margin: 0 auto 30px
+
+        .logo
+          width: 200px
+          margin-bottom: 30px
+
+        .link
+          margin-top: 20px
+
+      .register-form
+        margin-top: 30px
+
+@media (max-width: 500px)
+  .register
+    display: block
+
+    .content 
+      margin: 0
+      padding: 30px 10px
+
+      section
+        .logo
+          display: none
