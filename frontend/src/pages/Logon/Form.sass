@@ -1,0 +1,60 @@
+.form
+  .submit, input
+    display: block
+    width: 280px
+    border-radius: 4px
+
+  header
+    font-size: 26px
+    font-weight: 700
+    color: #222
+  
+  input 
+    padding: 12px
+    font-size: 16px
+    border: 0
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5)
+    margin-top: 20px
+
+  .submit
+    background-color: #DE2041
+    padding: 15px 0
+    font-weight: 500
+    border: none
+    font-size: 14px
+    color: #fff
+    margin-top: 12px
+
+    &:focus
+      text-decoration: underline
+
+  button[data-enabled="false"]
+      background-color: #999
+      pointer-events: none
+
+  .not-registered
+    margin-top: 26px
+    display: flex
+    flex-direction: row
+    align-items: center
+    border: none
+    font-size: 14px
+    background-color: transparent
+    
+    &:focus
+      p
+        text-decoration: underline
+
+
+    img
+      height: 20px
+
+    p
+      margin-left: 10px
+      color: #333
+      font-weight: 500
+
+@media (max-width: 800px)
+  .form
+    .submit, input
+      width: 300px

@@ -1,7 +1,9 @@
 import React from "react";
 
-import "./App.css";
+import "./global.sass";
+
+import Logon from "./pages/Logon";
 
 export default function App() {
-  return <h1>Hello world</h1>;
+  return <Logon />;
 }
