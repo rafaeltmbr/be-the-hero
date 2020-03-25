@@ -1,48 +1,42 @@
 .form
-  .submit, input
-    display: block
-    width: 280px
-    border-radius: 4px
+  width: 100%
+  max-width: 350px
 
   header
-    font-size: 26px
+    font-size: 32px
+    margin-bottom: 32px
     font-weight: 700
     color: #222
   
-  input 
-    padding: 12px
-    font-size: 16px
-    border: 0
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5)
-    margin-top: 20px
+  input, .button
+    width: 90vw
+    max-width: 100%
+    min-width: 288px
 
-  .submit
-    background-color: #E02041
-    padding: 15px 0
-    font-weight: 500
-    border: none
-    font-size: 14px
-    color: #fff
-    margin-top: 12px
+  .button
 
     &:focus
       text-decoration: underline
+
+    &:hover
+      filter: brightness(90%)
+      
 
   button[data-enabled="false"]
       background-color: #999
       pointer-events: none
 
   .not-registered
-    margin-top: 26px
+    margin-top: 40px
     display: flex
     flex-direction: row
     align-items: center
     border: none
-    font-size: 14px
+    font-size: 18px
     background-color: transparent
     text-decoration: none
     
-    &:focus
+    &:focus, &:hover
       p
         text-decoration: underline
 
@@ -51,7 +45,6 @@
       color: #333
       font-weight: 500
 
-@media (max-width: 800px)
+@media (min-width: 500px) and (max-width: 799px)
   .form
-    .submit, input
-      width: 300px
+    width: 500px

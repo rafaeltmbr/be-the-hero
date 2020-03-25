@@ -9,14 +9,16 @@ import heroes from "../../assets/heroes.png";
 export default function Logon() {
   return (
     <div className="logon">
-      <section className="form-container">
-        <img className="logo" alt="Be The Hero logo" src={logo} />
-        <Form
-          onSubmit={i => console.log("submit:", i)}
-          onRegister={() => console.log("new register")}
-        />
-      </section>
-      <img className="heroes" alt="Heroes banner" src={heroes} />
+      <div className="flex-container">
+        <section className="form-container">
+          <img className="logo" alt="Be The Hero logo" src={logo} />
+          <Form
+            onSubmit={i => console.log("submit:", i)}
+            onRegister={() => console.log("new register")}
+          />
+        </section>
+        <img className="heroes" alt="Heroes banner" src={heroes} />
+      </div>
     </div>
   );
 }

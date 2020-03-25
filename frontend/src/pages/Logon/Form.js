@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FiLogIn } from "react-icons/fi";
 
 import "./Form.sass";
-import login from "../../assets/login.svg";
 
 export default function Form({ idLength = 8, onSubmit, onRegister }) {
   const [input, setInput] = useState("");
@@ -46,7 +45,7 @@ export default function Form({ idLength = 8, onSubmit, onRegister }) {
         onKeyDown={handleKeydown}
       />
       <button
-        className="submit"
+        className="button"
         type="submit"
         data-enabled={enabled}
         tabIndex={enabled ? 2 : -1}
