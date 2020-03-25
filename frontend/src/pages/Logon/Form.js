@@ -41,7 +41,6 @@ export default function Form({ idLength = 8, onSubmit, onRegister }) {
         placeholder="Seu ID"
         value={input}
         onChange={validateInput}
-        autoFocus
         tabIndex={1}
         onKeyDown={handleKeydown}
       />

@@ -19,7 +19,7 @@ export default function Register() {
           </p>
           <Link to="/" className="link">
             <FiArrowLeft size={16} color="#E02041" />
-            <p>Já tenho cadastro</p>
+            <p>Voltar para o logon</p>
           </Link>
         </section>
         <Form />
