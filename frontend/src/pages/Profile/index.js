@@ -56,10 +56,10 @@ export default function Profile() {
     }
   }, [handleLogout]);
 
-  async function deleteIncident(index) {
+  async function deleteIncident(incidentID) {
     try {
       debugger;
-      await api.delete(`incidents/${incidents[index].id}`, {
+      await api.delete(`incidents/${incidentID}`, {
         headers: {
           Authorization: id
         }
@@ -88,15 +88,20 @@ export default function Profile() {
       </h1>
 
       <ul>
-        {incidents.map((c, i) => (
-          <li key={i}>
+        {incidents.map(c => (
+          <li key={c.id}>
             <strong>CASO:</strong>
             <p>{c.title}</p>
             <strong>DESCRIÇÃO</strong>
             <p>{c.description}</p>
             <strong>VALOR:</strong>
-            <p>R$ {Number(c.value).toFixed(2)}</p>
-            <button type="button" onClick={() => deleteIncident(i)}>
+            <p>
+              {Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+              }).format(c.value)}
+            </p>
+            <button type="button" onClick={() => deleteIncident(c.id)}>
               <FiTrash2 size={18} color="#a8a8b3" />
             </button>
           </li>
