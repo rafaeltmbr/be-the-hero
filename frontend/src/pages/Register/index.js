@@ -1,12 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 import "./styles.sass";
+import api from "../../services/api";
 import Logo from "../../assets/logo.svg";
 import Form from "./Form";
 
 export default function Register() {
+  const history = useHistory();
+
+  async function handleRegister(inputs) {
+    try {
+      const res = await api.post("ongs", inputs);
+      alert(`Seu id de acesso: ${res.data.ong_id}`);
+      history.push("/");
+    } catch (err) {
+      alert(`Usuário não cadastrado: ${err.response.data.message}`);
+    }
+  }
+
   return (
     <div className="register">
       <div className="content">
@@ -22,7 +35,7 @@ export default function Register() {
             <p>Voltar para o logon</p>
           </Link>
         </section>
-        <Form />
+        <Form onSubmit={handleRegister} />
       </div>
     </div>
   );

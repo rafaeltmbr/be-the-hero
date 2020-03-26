@@ -4,29 +4,13 @@ import { FiLogIn } from "react-icons/fi";
 
 import "./Form.sass";
 
-export default function Form({ idLength = 8, onSubmit, onRegister }) {
+export default function Form({ idLength = 8, onSubmit, onRegister, status }) {
   const [input, setInput] = useState("");
-
-  const enabled = input.length === idLength;
-
-  function validateInput(e) {
-    const { value } = e.target;
-    const [match] = value.match(/[0-9a-fA-F]+/) || [];
-
-    if (!value || (match === value && value.length <= idLength)) {
-      setInput(value);
-    }
-  }
-
-  function handleKeydown(e) {
-    if (e.nativeEvent.key === "Enter" && !enabled) {
-      e.nativeEvent.preventDefault();
-    }
-  }
 
   function handleSubmit(e) {
     e.nativeEvent.preventDefault();
     onSubmit && onSubmit(input);
+    setInput("");
   }
 
   function handleRegister(e) {
@@ -38,26 +22,21 @@ export default function Form({ idLength = 8, onSubmit, onRegister }) {
     <form className="form" onSubmit={handleSubmit}>
       <header>Faça seu Logon</header>
       <input
-        placeholder="Seu ID"
+        placeholder={
+          status === "unauthorized" ? "Usuário não encontrado" : "Seu ID"
+        }
         value={input}
-        onChange={validateInput}
+        onChange={e => setInput(e.target.value)}
         tabIndex={1}
-        onKeyDown={handleKeydown}
+        type="text"
+        pattern="[0-9a-fA-F]{8}$"
+        maxLength="8"
+        required
       />
-      <button
-        className="button"
-        type="submit"
-        data-enabled={enabled}
-        tabIndex={enabled ? 2 : -1}
-      >
+      <button className="button" type="submit">
         Entrar
       </button>
-      <Link
-        to="/register"
-        className="link"
-        tabIndex={enabled ? 3 : 2}
-        onClick={handleRegister}
-      >
+      <Link to="/register" className="link" onClick={handleRegister}>
         <FiLogIn size={16} color="#E02041" />
         <p>Não tenho cadastro</p>
       </Link>

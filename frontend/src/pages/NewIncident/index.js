@@ -1,12 +1,40 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 import "./styles.sass";
 import Logo from "../../assets/logo.svg";
 import Form from "./Form";
+import api from "../../services/api";
 
 export default function NewIncident() {
+  const [id, setId] = useState();
+  const history = useHistory();
+
+  useEffect(() => {
+    const i = localStorage.getItem("ong_id");
+    if (i) {
+      setId(i);
+    } else {
+      history.push("/");
+      localStorage.clear();
+    }
+  }, [history]);
+
+  async function handleSubmit(incident) {
+    try {
+      await api.post("incidents", incident, {
+        headers: {
+          Authorization: id
+        }
+      });
+    } catch (err) {
+      console.warn(err.response.data);
+    } finally {
+      history.push("/profile");
+    }
+  }
+
   return (
     <div className="new-incident">
       <div className="content">
@@ -22,7 +50,7 @@ export default function NewIncident() {
             <p>Voltar para home</p>
           </Link>
         </section>
-        <Form />
+        <Form onSubmit={handleSubmit} />
       </div>
     </div>
   );

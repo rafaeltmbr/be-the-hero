@@ -1,23 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Form from "./Form";
 import "./styles.sass";
-
-import { url } from "../server.json";
+import api from "../../services/api";
 
 import logo from "../../assets/logo.svg";
 import heroes from "../../assets/heroes.png";
 
 export default function Logon() {
+  const [status, setStatus] = useState("waiting");
+  const history = useHistory();
+
   async function onSubmit(id) {
     try {
-      const res = await fetch(url + "/sessions", {
-        method: "POST",
-        body: JSON.stringify({ id })
-      });
-      console.log(res);
+      const {
+        data: { name }
+      } = await api.post("sessions", { id });
+      localStorage.setItem("ong_id", id);
+      localStorage.setItem("ong_name", name);
+      history.push("/profile");
     } catch (err) {
-      console.error({ message: err.message });
+      setStatus("unauthorized");
+      console.warn(err.response.data);
     }
   }
 
@@ -27,6 +32,7 @@ export default function Logon() {
         <section className="form-container">
           <img className="logo" alt="Be The Hero logo" src={logo} />
           <Form
+            status={status}
             onSubmit={onSubmit}
             onRegister={() => console.log("new register")}
           />
