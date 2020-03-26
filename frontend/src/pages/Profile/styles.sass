@@ -1,0 +1,110 @@
+.profile
+  width: 100%
+  max-width: 1180px
+  padding: 0 30px
+  margin: 32px auto 64px
+  position: relative
+
+  header
+    position: sticky
+    top: 0
+    padding: 10px 0
+    border-bottom: 1px solid #e0e0e7
+    display: flex
+    align-items: center
+    background-color: #f0f0f5
+    z-index: 10
+
+    .logo
+      height: 64px
+
+    span
+      font-size: 20px
+      margin: 0 24px
+      flex: 1
+      text-overflow: ellipsis
+      white-space: nowrap
+      overflow: hidden
+
+    .button
+      width: 260px
+      margin-top: 0
+
+    button
+      width: 60px
+      height: 60px
+      border-radius: 4px
+      border: 1px solid #dcdce6
+      background-color: transparent
+      margin-left: 16px
+      transition: border-color 0.2s
+
+      &:hover
+        border-color: #999
+
+  h1
+    margin-top: 80px
+    margin-bottom: 24px
+
+  ul
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+    gap: 24px
+    list-style: none
+
+    li
+      background-color: #ffffff
+      padding: 24px
+      border-radius: 8px
+      position: relative
+
+      button
+        background-color: transparent
+        position: absolute
+        top: 24px
+        right: 24px
+        border: none
+
+        &:hover
+          opacity: 0.8
+
+      strong
+        display: block
+        margin-bottom: 16px
+        color: #41414d
+
+      p + strong
+        margin-top: 32px
+
+      p
+        color: #737380
+        line-height: 21px
+        font-size: 16px
+
+@media (max-width: 1000px)
+  .profile
+    header
+      .button
+        width: 120px
+        padding: 0 10px
+        text-align: center
+        font-size: 16px
+      .logo
+        height: 40px
+    h1
+      margin-top: 40px
+
+@media (max-width: 800px)
+  .profile
+    header
+
+    ul
+      grid-template-columns: 1fr
+
+@media (max-width: 600px)
+  .profile
+    padding: 0 20px
+
+    header
+      span 
+        margin: 0 16px
