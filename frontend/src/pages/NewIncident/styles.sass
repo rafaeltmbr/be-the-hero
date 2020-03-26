@@ -1,3 +1,86 @@
-.new-incident
-  h1
-    color: blue
+.new-incident 
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  display: flex
+  align-items: center
+  justify-content: center
+
+  .content
+    width: 100%
+    max-width: 1100px
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: space-between
+    background-color: #f0f0f5
+    padding: 96px
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1)
+
+    section
+      width: 100%
+      margin-right: 50px
+
+      h1
+        margin: 64px 0 32px
+        font-size: 32px
+        display: inline-block
+
+      p
+        font-size: 18px
+        color: #737380
+        line-height: 32px
+
+      .link
+        p
+          color: #333
+
+@media (max-width: 1000px)
+  .new-incident
+    display: block
+
+    .content
+      display: block
+      max-width: 500px
+      margin: 0 auto
+      padding: 30px 20px 90px
+      box-shadow: none
+      position: relative
+
+      section
+        margin-right: 0
+        h1
+          margin: 0 auto 40px
+
+        .logo
+          position: absolute
+          height: 50px
+          right: 25px
+          top: 30px
+
+        .link
+          position: absolute
+          margin-top: 410px
+
+
+      .incident-form
+        margin-top: 30px
+
+@media (max-width: 500px)
+  .new-incident
+    display: block
+    background-color: #f0f0f5
+
+    .content 
+      margin: 0
+      padding: 30px 20px 90px
+      box-shadow: none
+
+      section
+        h1
+          margin-right: 110px
+
+        .logo
+          height: 40px
