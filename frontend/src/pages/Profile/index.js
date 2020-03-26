@@ -18,22 +18,25 @@ export default function Profile() {
     history.push("/");
   }, [history]);
 
-  function fetchAndUpdateIncidents() {
+  const fetchAndUpdateIncidents = useCallback(async () => {
     if (!id) return;
 
     try {
-      api
-        .get("profile", {
-          headers: {
-            Authorization: id
-          }
-        })
-        .then(res => setIncidents(res.data.incidents));
+      const res = await api.get("profile", {
+        headers: {
+          Authorization: id
+        }
+      });
+      setIncidents(res.data.incidents);
     } catch (err) {
-      console.warn(err);
+      console.warn(err.response ? err.response.data : err.message);
+      handleLogout();
     }
-  }
-  useEffect(fetchAndUpdateIncidents, [id]);
+  }, [handleLogout, id]);
+
+  useEffect(() => {
+    fetchAndUpdateIncidents();
+  }, [fetchAndUpdateIncidents, id]);
 
   useEffect(() => {
     const n = localStorage.getItem("ong_name");
@@ -63,7 +66,7 @@ export default function Profile() {
       });
       fetchAndUpdateIncidents();
     } catch (err) {
-      console.warn(err.response.data);
+      console.warn(err.response ? err.response.data : err.message);
     }
   }
 

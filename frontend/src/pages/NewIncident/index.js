@@ -29,7 +29,7 @@ export default function NewIncident() {
         }
       });
     } catch (err) {
-      console.warn(err.response.data);
+      console.warn(err.response ? err.response.data : err.message);
     } finally {
       history.push("/profile");
     }

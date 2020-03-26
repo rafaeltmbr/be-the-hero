@@ -22,7 +22,7 @@ export default function Logon() {
       history.push("/profile");
     } catch (err) {
       setStatus("unauthorized");
-      console.warn(err.response.data);
+      console.warn(err.response ? err.response.data : err.message);
     }
   }
 
@@ -31,11 +31,7 @@ export default function Logon() {
       <div className="flex-container">
         <section className="form-container">
           <img className="logo" alt="Be The Hero logo" src={logo} />
-          <Form
-            status={status}
-            onSubmit={onSubmit}
-            onRegister={() => console.log("new register")}
-          />
+          <Form status={status} onSubmit={onSubmit} />
         </section>
         <img className="heroes" alt="Heroes banner" src={heroes} />
       </div>

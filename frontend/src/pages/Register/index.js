@@ -16,7 +16,8 @@ export default function Register() {
       alert(`Seu id de acesso: ${res.data.ong_id}`);
       history.push("/");
     } catch (err) {
-      alert(`Usuário não cadastrado: ${err.response.data.message}`);
+      alert("Usuário não cadastrado, tente novamente");
+      console.warn(err.response ? err.response.data : err.message);
     }
   }
 

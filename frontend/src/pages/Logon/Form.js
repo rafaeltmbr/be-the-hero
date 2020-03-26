@@ -4,18 +4,13 @@ import { FiLogIn } from "react-icons/fi";
 
 import "./Form.sass";
 
-export default function Form({ idLength = 8, onSubmit, onRegister, status }) {
+export default function Form({ idLength = 8, onSubmit, status }) {
   const [input, setInput] = useState("");
 
   function handleSubmit(e) {
     e.nativeEvent.preventDefault();
     onSubmit && onSubmit(input);
     setInput("");
-  }
-
-  function handleRegister(e) {
-    e.nativeEvent.preventDefault();
-    onRegister && onRegister();
   }
 
   return (
@@ -36,7 +31,7 @@ export default function Form({ idLength = 8, onSubmit, onRegister, status }) {
       <button className="button" type="submit">
         Entrar
       </button>
-      <Link to="/register" className="link" onClick={handleRegister}>
+      <Link to="/register" className="link">
         <FiLogIn size={16} color="#E02041" />
         <p>Não tenho cadastro</p>
       </Link>
