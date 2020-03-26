@@ -23,8 +23,10 @@
       margin: 0 24px
       flex: 1
       text-overflow: ellipsis
-      white-space: nowrap
       overflow: hidden
+      display: -webkit-box
+      -webkit-box-orient: vertical
+      -webkit-line-clamp: 2
 
     .button
       width: 260px
@@ -108,3 +110,10 @@
     header
       span 
         margin: 0 16px
+        font-size: 16px
+
+@media (max-width: 470px)
+  .profile
+    header
+      span
+        opacity: 0
