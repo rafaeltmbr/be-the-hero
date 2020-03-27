@@ -1,6 +1,13 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import {View, Image, TouchableOpacity, Text, Linking} from 'react-native';
+import {
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+  Linking,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import email from 'react-native-email';
 
@@ -48,39 +55,41 @@ export default function Detail({navigation, route}) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.incident}>
-        <Text style={styles.incidentProperty}>ONG:</Text>
-        <Text style={styles.incidentValue}>
-          {incident.name} de {incident.city}/{incident.uf}
-        </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.incident}>
+          <Text style={styles.incidentProperty}>ONG:</Text>
+          <Text style={styles.incidentValue}>
+            {incident.name} de {incident.city}/{incident.uf}
+          </Text>
 
-        <Text style={styles.incidentProperty}>CASO:</Text>
-        <Text style={styles.incidentValue}>{incident.title}</Text>
+          <Text style={styles.incidentProperty}>CASO:</Text>
+          <Text style={styles.incidentValue}>{incident.title}</Text>
 
-        <Text style={styles.incidentProperty}>DESCRIÇÃO:</Text>
-        <Text style={styles.incidentValue}>{incident.description}</Text>
+          <Text style={styles.incidentProperty}>DESCRIÇÃO:</Text>
+          <Text style={styles.incidentValue}>{incident.description}</Text>
 
-        <Text style={styles.incidentProperty}>VALOR:</Text>
-        <Text style={[styles.incidentValue, styles.lastIncidentValue]}>
-          {value}
-        </Text>
-      </View>
-
-      <View style={styles.contactBox}>
-        <Text style={styles.heroTitle}>Salve o dia!</Text>
-        <Text style={styles.heroTitle}>Seja o herói desse caso.</Text>
-
-        <Text style={styles.heroDescription}>Entre em contato:</Text>
-        <View style={styles.actions}>
-          <TouchableOpacity style={styles.action} onPress={senWhatsapp}>
-            <Text style={styles.actionText}>WhatsApp</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.action} onPress={sendEmail}>
-            <Text style={styles.actionText}>E-mail</Text>
-          </TouchableOpacity>
+          <Text style={styles.incidentProperty}>VALOR:</Text>
+          <Text style={[styles.incidentValue, styles.lastIncidentValue]}>
+            {value}
+          </Text>
         </View>
-      </View>
+
+        <View style={styles.contactBox}>
+          <Text style={styles.heroTitle}>Salve o dia!</Text>
+          <Text style={styles.heroTitle}>Seja o herói desse caso.</Text>
+
+          <Text style={styles.heroDescription}>Entre em contato:</Text>
+          <View style={styles.actions}>
+            <TouchableOpacity style={styles.action} onPress={senWhatsapp}>
+              <Text style={styles.actionText}>WhatsApp</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.action} onPress={sendEmail}>
+              <Text style={styles.actionText}>E-mail</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }

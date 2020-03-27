@@ -14,9 +14,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 16,
   },
   incident: {
-    marginTop: 48,
+    marginTop: 32,
     padding: 24,
     borderRadius: 8,
     backgroundColor: '#fff',
