@@ -5,10 +5,10 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#111',
+    backgroundColor: '#aaffaa',
   },
   text: {
     fontSize: 36,
-    color: 'tomato',
+    color: '#111',
   },
 });

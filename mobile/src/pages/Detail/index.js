@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-import style from './AppStyle';
+import style from './styles';
 
 export default function App() {
   return (
     <View style={style.container}>
-      <Text style={style.text}>Hello world</Text>
+      <Text style={style.text}>Detail</Text>
     </View>
   );
 }
