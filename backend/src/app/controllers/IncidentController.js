@@ -5,7 +5,7 @@ import dbConnection from '../../database/connection';
 const storeSchema = Yup.object().shape({
   title: Yup.string().required(),
   description: Yup.string().required(),
-  value: Yup.number().strict().required(),
+  value: Yup.number().positive().strict().required(),
   id: Yup.string().length(8).required(),
 });
 
