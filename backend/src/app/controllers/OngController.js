@@ -9,11 +9,18 @@ const ongIdSchema = Yup.object().shape({
 });
 
 const storeSchema = Yup.object().shape({
-  name: Yup.string().strict().required(),
-  email: Yup.string().email().strict().required(),
-  whatsapp: Yup.string().strict().required(),
-  city: Yup.string().strict().required(),
-  uf: Yup.string().strict().required(),
+  name: Yup.string().required(),
+  email: Yup.string().email().required(),
+  whatsapp: Yup.number().test(
+    'len',
+    'Number should vary between 10 to 13 digits',
+    (n) => {
+      const len = `${n}`.length;
+      return len >= 10 && len <= 13;
+    }
+  ),
+  city: Yup.string().required(),
+  uf: Yup.string().required().length(2),
 });
 
 class OngController {
@@ -61,8 +68,10 @@ class OngController {
 
   async store(req, res) {
     try {
-      if (!(await storeSchema.isValid(req.body))) {
-        return res.status(400).json({ message: 'Invalid schema' });
+      try {
+        await storeSchema.validate(req.body);
+      } catch ({ message }) {
+        return res.status(400).json({ message });
       }
 
       const emailExist = await dbConnection('ongs')

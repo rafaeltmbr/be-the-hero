@@ -6,10 +6,12 @@ const storeSchema = Yup.object().shape({
   title: Yup.string().required(),
   description: Yup.string().required(),
   value: Yup.number().strict().required(),
+  id: Yup.string().length(8).required(),
 });
 
-const ongIdSchema = Yup.object().shape({
-  id: Yup.string().length(8).strict().required(),
+const deleteSchema = Yup.object().shape({
+  ong_id: Yup.string().length(8).required(),
+  id: Yup.number().positive().required(),
 });
 
 class IncidentController {
@@ -80,8 +82,11 @@ class IncidentController {
   async store(req, res) {
     try {
       const ong_id = req.headers.authorization;
-      if (!(await ongIdSchema.isValid({ id: ong_id }))) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+
+      try {
+        await storeSchema.validate({ ...req.body, id: ong_id });
+      } catch ({ message }) {
+        return res.status(401).json({ message });
       }
 
       const ong = await dbConnection('ongs')
@@ -90,7 +95,7 @@ class IncidentController {
         .first();
 
       if (!ong) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        return res.status(404).json({ message: 'Ong not found' });
       }
 
       if (!(await storeSchema.isValid(req.body))) {
@@ -113,8 +118,10 @@ class IncidentController {
       const ong_id = req.headers.authorization;
       const { id } = req.params;
 
-      if (!(await ongIdSchema.isValid({ id: ong_id }))) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+      try {
+        await deleteSchema.validate({ ong_id, id });
+      } catch ({ message }) {
+        return res.status(401).json({ message });
       }
 
       const incident = await dbConnection('incidents')
