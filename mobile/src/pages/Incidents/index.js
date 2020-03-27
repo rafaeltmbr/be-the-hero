@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, {useState, useEffect} from 'react';
 import {View, FlatList, Text, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -9,28 +10,52 @@ import logo from '../../assets/logo.png';
 
 export default function App({navigation}) {
   const [incidents, setIncidents] = useState();
+  const [totalCount, setTotalCount] = useState('?');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  function loadIncidents() {
+    if (loading) {
+      return;
+    }
+
+    if (totalCount === (incidents && incidents.length)) {
+      return;
+    }
+
+    setLoading(true);
+
     api
-      .get('incidents?page_size=20')
-      .then(res => setIncidents(res.data.incidents))
+      .get('incidents', {
+        params: {
+          page: currentPage + 1,
+        },
+      })
+      .then(res => {
+        const newIncidents = incidents
+          ? incidents.concat(res.data.incidents)
+          : res.data.incidents;
+        setIncidents(newIncidents);
+        setTotalCount(parseInt(res.headers['x-total-count'], 10));
+        setCurrentPage(currentPage + 1);
+      })
       .catch(err =>
         console.warn(err.response ? err.response.data : err.message),
-      );
-  }, []);
+      )
+      .finally(() => setLoading(false));
+  }
+  useEffect(loadIncidents, []);
 
   function navigateToDetail(incident) {
     navigation.navigate('Detail', incident);
   }
-
-  const totalCases = incidents ? incidents.length : '?';
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image source={logo} />
         <Text style={styles.headerText}>
-          Total de <Text style={styles.headerTextBold}>{totalCases} casos</Text>
+          Total de <Text style={styles.headerTextBold}>{totalCount} casos</Text>
           .
         </Text>
       </View>
@@ -45,6 +70,8 @@ export default function App({navigation}) {
           data={incidents}
           keyExtractor={i => `${i.id}`}
           showsVerticalScrollIndicator={false}
+          onEndReached={loadIncidents}
+          onEndReachedThreshold={0.2}
           renderItem={({item: i}) => (
             <View style={styles.incident}>
               <Text style={styles.incidentProperty}>ONG:</Text>
@@ -54,7 +81,14 @@ export default function App({navigation}) {
               <Text style={styles.incidentValue}>{i.title}</Text>
 
               <Text style={styles.incidentProperty}>VALOR:</Text>
-              <Text style={styles.incidentValue}>R$ {i.value}</Text>
+              <Text style={styles.incidentValue}>
+                {Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })
+                  .format(i.value)
+                  .replace(/^(\D+)/, '$1 ')}
+              </Text>
 
               <TouchableOpacity
                 style={styles.detailsButton}
