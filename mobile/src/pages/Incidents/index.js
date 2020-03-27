@@ -1,46 +1,29 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, FlatList, Text, Image, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 
+import api from '../../services/api';
 import styles from './styles';
 
 import logo from '../../assets/logo.png';
 
-export default function App() {
-  const navigation = useNavigation();
-  const ongName = 'APAD';
-  //const ongId = '1313304a';
+export default function App({navigation}) {
+  const [incidents, setIncidents] = useState();
+
+  useEffect(() => {
+    api
+      .get('incidents?page_size=20')
+      .then(res => setIncidents(res.data.incidents))
+      .catch(err =>
+        console.warn(err.response ? err.response.data : err.message),
+      );
+  }, []);
 
   function navigateToDetail(incident) {
-    navigation.navigate('Detail');
+    navigation.navigate('Detail', incident);
   }
 
-  const totalCases = 2;
-
-  const incidents = [
-    {
-      id: 1,
-      title: 'Lolly 1',
-      description:
-        'Lolly é uma cachorra que acabou de parir 16 filhotes e precisa de ajuda para comprar fraldas.',
-      value: '65,00',
-    },
-    {
-      id: 2,
-      title: 'Lolly 2',
-      description:
-        'Lolly é uma cachorra que acabou de parir 16 filhotes e precisa de ajuda para comprar fraldas.',
-      value: '65,00',
-    },
-    {
-      id: 3,
-      title: 'Lolly 3',
-      description:
-        'Lolly é uma cachorra que acabou de parir 16 filhotes e precisa de ajuda para comprar fraldas.',
-      value: '65,00',
-    },
-  ];
+  const totalCases = incidents ? incidents.length : '?';
 
   return (
     <View style={styles.container}>
@@ -56,31 +39,39 @@ export default function App() {
         Escolha um dos casos abaixo e salve o dia
       </Text>
 
-      <FlatList
-        style={styles.incidentList}
-        data={incidents}
-        keyExtractor={i => `${i.id}`}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item: i}) => (
-          <View style={styles.incident}>
-            <Text style={styles.incidentProperty}>ONG:</Text>
-            <Text style={styles.incidentValue}>{ongName}</Text>
+      {incidents && incidents.length ? (
+        <FlatList
+          style={styles.incidentList}
+          data={incidents}
+          keyExtractor={i => `${i.id}`}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item: i}) => (
+            <View style={styles.incident}>
+              <Text style={styles.incidentProperty}>ONG:</Text>
+              <Text style={styles.incidentValue}>{i.name}</Text>
 
-            <Text style={styles.incidentProperty}>CASO:</Text>
-            <Text style={styles.incidentValue}>{i.title}</Text>
+              <Text style={styles.incidentProperty}>CASO:</Text>
+              <Text style={styles.incidentValue}>{i.title}</Text>
 
-            <Text style={styles.incidentProperty}>VALOR:</Text>
-            <Text style={styles.incidentValue}>R$ {i.value}</Text>
+              <Text style={styles.incidentProperty}>VALOR:</Text>
+              <Text style={styles.incidentValue}>R$ {i.value}</Text>
 
-            <TouchableOpacity
-              style={styles.detailsButton}
-              onPress={navigateToDetail}>
-              <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
-              <Icon name="arrow-right" size={16} color="#e02041" />
-            </TouchableOpacity>
-          </View>
-        )}
-      />
+              <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={() => navigateToDetail(i)}>
+                <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
+                <Icon name="arrow-right" size={16} color="#e02041" />
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      ) : (
+        <View style={styles.noIncidentsContainer}>
+          <Text style={styles.noIncidentsText}>
+            {incidents ? 'No incidents' : 'Loading...'}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }

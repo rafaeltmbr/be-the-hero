@@ -32,6 +32,7 @@ class IncidentController {
         .limit(page_size)
         .offset(offset)
         .select([
+          'incidents.id',
           'incidents.title',
           'incidents.description',
           'incidents.value',

@@ -1,11 +1,13 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+
+const isAndroid = Platform.OS === 'android';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
-    marginTop: getStatusBarHeight(true) + 20,
+    marginTop: getStatusBarHeight(isAndroid) + 20,
     backgroundColor: '#f0f0fc',
   },
   header: {
@@ -61,5 +63,14 @@ export default StyleSheet.create({
     color: '#e02041',
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  noIncidentsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noIncidentsText: {
+    fontSize: 24,
+    color: '#737380',
   },
 });
