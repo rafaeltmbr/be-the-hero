@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import crypto from 'crypto';
 import * as Yup from 'yup';
 
 import dbConnection from '../../database/connection';
+import generateUniqueId from '../../utils/generateUniqueId';
 
 const ongIdSchema = Yup.object().shape({
   id: Yup.string().length(8).strict().required(),
@@ -11,14 +11,10 @@ const ongIdSchema = Yup.object().shape({
 const storeSchema = Yup.object().shape({
   name: Yup.string().required(),
   email: Yup.string().email().required(),
-  whatsapp: Yup.number().test(
-    'len',
-    'Number should vary between 10 to 13 digits',
-    (n) => {
-      const len = `${n}`.length;
-      return len >= 10 && len <= 13;
-    }
-  ),
+  whatsapp: Yup.number().test('len', 'Number should vary between 10 to 13 digits', (n) => {
+    const len = `${n}`.length;
+    return len >= 10 && len <= 13;
+  }),
   city: Yup.string().required(),
   uf: Yup.string().required().length(2),
 });
@@ -83,7 +79,7 @@ class OngController {
         return res.status(400).json({ message: 'This email already exists' });
       }
 
-      const id = crypto.randomBytes(4).toString('HEX');
+      const id = generateUniqueId();
       const ong = { ...req.body, id };
 
       await dbConnection('ongs').insert(ong);

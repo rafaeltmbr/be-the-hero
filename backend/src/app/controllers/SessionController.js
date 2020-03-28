@@ -15,10 +15,7 @@ class SessionController {
         return res.status(401).json({ message: 'Invalid schema' });
       }
 
-      const ong = await dbConnection('ongs')
-        .select('name')
-        .where({ id })
-        .first();
+      const ong = await dbConnection('ongs').select('name').where({ id }).first();
 
       if (!ong) {
         return res.status(404).json({ message: 'ONG not found' });

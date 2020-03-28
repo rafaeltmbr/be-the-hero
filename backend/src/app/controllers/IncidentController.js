@@ -84,22 +84,16 @@ class IncidentController {
       const ong_id = req.headers.authorization;
 
       try {
-        await storeSchema.validate({ ...req.body, id: ong_id });
+        const schema = { ...req.body, id: ong_id };
+        await storeSchema.validate(schema);
       } catch ({ message }) {
         return res.status(401).json({ message });
       }
 
-      const ong = await dbConnection('ongs')
-        .select('id')
-        .where({ id: ong_id })
-        .first();
+      const ong = await dbConnection('ongs').select('id').where({ id: ong_id }).first();
 
       if (!ong) {
         return res.status(404).json({ message: 'Ong not found' });
-      }
-
-      if (!(await storeSchema.isValid(req.body))) {
-        return res.status(400).json({ message: 'Invalid schema' });
       }
 
       const [id] = await dbConnection('incidents').insert({
@@ -124,10 +118,7 @@ class IncidentController {
         return res.status(401).json({ message });
       }
 
-      const incident = await dbConnection('incidents')
-        .select('*')
-        .where({ id })
-        .first();
+      const incident = await dbConnection('incidents').select('*').where({ id }).first();
 
       if (!incident) {
         return res.status(404).json({ message: 'Incident not found' });
