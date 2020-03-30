@@ -1,6 +1,12 @@
-import * as Yup from 'yup';
+const { string, object, number } = require('yup');
 
-import dbConnection from '../../database/connection';
+const Yup = {
+  string,
+  object,
+  number,
+};
+
+const dbConnection = require('../../database/connection');
 
 const storeSchema = Yup.object().shape({
   title: Yup.string().required(),
@@ -136,4 +142,4 @@ class IncidentController {
   }
 }
 
-export default new IncidentController();
+module.exports = new IncidentController();

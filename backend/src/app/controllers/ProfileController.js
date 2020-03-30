@@ -1,6 +1,11 @@
-import * as Yup from 'yup';
+const { string, object, number } = require('yup');
+const dbConnection = require('../../database/connection');
 
-import dbConnection from '../../database/connection';
+const Yup = {
+  string,
+  object,
+  number,
+};
 
 const ongIdSchema = Yup.object().shape({
   id: Yup.string().length(8).strict().required(),
@@ -31,4 +36,4 @@ class ProfileController {
   }
 }
 
-export default new ProfileController();
+module.exports = new ProfileController();

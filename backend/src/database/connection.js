@@ -1,5 +1,5 @@
-import knex from 'knex';
-import configuration from '../../knexfile';
+const knex = require('knex');
+const configuration = require('../../knexfile');
 
 const configs = {
   development: configuration.development,
@@ -12,4 +12,4 @@ const databaseConfig = configs[process.env.NODE_ENV] || configuration.developmen
 
 const connection = knex(databaseConfig);
 
-export default connection;
+module.exports = connection;

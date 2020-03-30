@@ -1,9 +1,9 @@
-import { Router } from 'express';
+const { Router } = require('express');
 
-import OngController from './app/controllers/OngController';
-import IncidentController from './app/controllers/IncidentController';
-import ProfileController from './app/controllers/ProfileController';
-import SessionController from './app/controllers/SessionController';
+const OngController = require('./app/controllers/OngController');
+const IncidentController = require('./app/controllers/IncidentController');
+const ProfileController = require('./app/controllers/ProfileController');
+const SessionController = require('./app/controllers/SessionController');
 
 const routes = Router();
 
@@ -22,8 +22,6 @@ routes.delete('/incidents/:id', IncidentController.delete);
 
 routes.get('/profile', ProfileController.index);
 
-routes.all('*', (req, res) =>
-  res.status(404).json({ error: 'Resource not found' })
-);
+routes.all('*', (req, res) => res.status(404).json({ error: 'Resource not found' }));
 
-export default routes;
+module.exports = routes;

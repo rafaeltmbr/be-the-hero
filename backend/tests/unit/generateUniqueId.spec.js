@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import generateUniqueId from '../../src/utils/generateUniqueId';
+const generateUniqueId = require('../../src/utils/generateUniqueId');
 
 describe('geneateUniqueId testing', () => {
   it('should return random strings', () => {

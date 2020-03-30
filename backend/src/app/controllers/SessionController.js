@@ -1,6 +1,11 @@
-import * as Yup from 'yup';
+const { string, object, number } = require('yup');
 
-import dbConnection from '../../database/connection';
+const Yup = {
+  string,
+  object,
+  number,
+};
+const dbConnection = require('../../database/connection');
 
 const ongIdSchema = Yup.object().shape({
   id: Yup.string().length(8).required(),
@@ -28,4 +33,4 @@ class SessionController {
   }
 }
 
-export default new SessionController();
+module.exports = new SessionController();

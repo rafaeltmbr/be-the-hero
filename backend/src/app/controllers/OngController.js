@@ -1,8 +1,14 @@
 /* eslint-disable no-console */
-import * as Yup from 'yup';
+const { string, object, number } = require('yup');
 
-import dbConnection from '../../database/connection';
-import generateUniqueId from '../../utils/generateUniqueId';
+const Yup = {
+  string,
+  object,
+  number,
+};
+
+const dbConnection = require('../../database/connection');
+const generateUniqueId = require('../../utils/generateUniqueId');
 
 const ongIdSchema = Yup.object().shape({
   id: Yup.string().length(8).strict().required(),
@@ -91,4 +97,4 @@ class OngController {
   }
 }
 
-export default new OngController();
+module.exports = new OngController();

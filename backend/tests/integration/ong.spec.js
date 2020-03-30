@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import request from 'supertest';
+let request = require('supertest');
 
-import app from '../../src/app';
-import dbConnection from '../../src/database/connection';
+const app = require('../../src/app');
+const dbConnection = require('../../src/database/connection');
 
 request = request(app);
 

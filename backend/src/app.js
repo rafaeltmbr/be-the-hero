@@ -1,7 +1,8 @@
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
 
-import routes from './routes';
+const routes = require('./routes');
 
 class App {
   constructor() {
@@ -13,6 +14,9 @@ class App {
   middlewares() {
     this.app.use(cors());
     this.app.use(express.json());
+
+    const staticPath = path.resolve(__dirname, '..', '..', 'frontend', 'build');
+    this.app.use(express.static(staticPath));
   }
 
   routes() {
@@ -20,4 +24,4 @@ class App {
   }
 }
 
-export default new App().app;
+module.exports = new App().app;

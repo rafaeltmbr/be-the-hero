@@ -21,11 +21,12 @@
     "jest": "^25.2.3",
     "nodemon": "^2.0.2",
     "prettier": "^2.0.2",
-    "sucrase": "^3.12.1",
     "supertest": "^4.0.2"
   },
   "scripts": {
     "dev": "nodemon src/index.js",
-    "test": "cross-env NODE_ENV=test jest"
+    "start": "node src/index.js",
+    "test": "cross-env NODE_ENV=test jest",
+    "heroku": "heroku local web"
   }
 }
