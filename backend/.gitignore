@@ -2,4 +2,6 @@
 
 **.lock
 
+tests/coverage
+
 src/database/db.sqlite
